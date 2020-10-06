@@ -1,10 +1,12 @@
 const express = require("express") ;
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 app = express();
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(express.static('public'));
+app.use(cors());
 mongoose.connect('mongodb+srv://neeraj:Z8KN3ljwi8MGctiA@cluster0-fgrdj.gcp.mongodb.net/wardrobeDB?retryWrites=true&w=majority', { useUnifiedTopology: true, useNewUrlParser: true });
 
 const userSchema = new mongoose.Schema({
@@ -55,7 +57,7 @@ Users.findOne({ fName: 'Neeraj' }, (err, user) => {
 	myId = user._id;
 });
 
-app.get('/',function(req,res){
+app.get('/', (req,res) => {
     Clothes.find({user: myId}, function(err, response){
         res.send(response);
     });
