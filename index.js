@@ -2,6 +2,7 @@ const express = require("express") ;
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const https = require('https');
 
 app = express();
 app.use(bodyParser.urlencoded({extended : true}));
@@ -63,6 +64,19 @@ app.get('/', (req,res) => {
     });
 })
 
+app.get('/weather', (req,res) => {
+	var city = 'Mumbai';
+	var url = 'https://api.openweathermap.org/data/2.5/weather?q='+city+'&appid=c9ae2c13187279ee786d6369b8618cb7&units=metric'
+	https.get(url, function(resp){
+		resp.on('data',function(data){
+		  var info = JSON.parse(data);
+		  temp = info.main.temp;
+		  desc = info.weather[0].description;
+		  icon = info.weather[0].icon;
+		  res.send({temp:temp,desc:desc,icon:icon});
+		})
+	  });
+})
 
 app.listen(5000,function(){
     console.log("Showing your wardrobe");
