@@ -34,7 +34,7 @@ const clothSchema = new mongoose.Schema({
 	form: String,
 	particulars: String,
 	length: Number,
-	collar: Number,
+	collar: String,
 	color: {
 		type: Object,
 		required: true
