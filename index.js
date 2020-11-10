@@ -49,20 +49,46 @@ const clothSchema = new mongoose.Schema({
 	user: mongoose.ObjectId
 });
 
+const footwearSchema = new mongoose.Schema({
+	category: {
+		type: String,
+		required: true
+	},
+	form: String,
+	color: {
+		type: Object,
+		required: true
+	},
+	brand: String,
+	age: Number,
+	fitting: Number,
+	tags: {
+		type: Array,
+		required: true
+	},
+	user: mongoose.ObjectId,
+	image: String
+})
+
 
 const Users = mongoose.model("user", userSchema);
 const Clothes = mongoose.model("cloth", clothSchema, 'clothes');
+const Footwear = mongoose.model("footwear", footwearSchema, 'footwear');
 
 var myId;
+
 Users.findOne({ fName: 'Neeraj' }, (err, user) => {
 	myId = user._id;
 });
 
-app.get('/', (req,res) => {
-    Clothes.find({user: myId}, function(err, response){
-        res.send(response);
-    });
-})
+app.get('/wardrobe', (req,res) => {
+    Clothes.find({user: myId}, function(err1, clothes){
+		Footwear.find({user: myId}, function(err2, footwear){
+			res.send({'clothes':clothes,'footwear':footwear});
+		});
+	});
+});
+
 
 app.get('/weather', (req,res) => {
 	var city = 'Mumbai';
